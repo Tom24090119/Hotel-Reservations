@@ -1,47 +1,65 @@
 package hotels;
 
+import Reservation.Customer;
+import Reservation.RoomReservation;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 public class Room {
 
-    private final String roomType;
+    private final RoomDetails roomDetails;
 
-    private final int roomNumber;
-
-    private final int maxOccupants;
-
-    private final int costPerNight;
-
-    private boolean reserved;
+    //TODO : Later see if you can remove this customer list
+    private final List<Customer> customers;
+    private final List<RoomReservation> reservations;
 
 
-    public Room(String roomType, int roomNumber, int maxOccupants, int costPerNight, boolean reserved) {
-        this.roomType = roomType;
-        this.roomNumber = roomNumber;
-        this.maxOccupants = maxOccupants;
-        this.costPerNight = costPerNight;
-        this.reserved = reserved;
+    public Room(RoomDetails details) {
+        this.roomDetails = details;
+        this.customers = new ArrayList<>();
+        this.reservations = new ArrayList<>();
+    }
+    public RoomDetails getRoomDetails() {
+        return roomDetails;
+    }
+    public List<RoomReservation> getReservations() {
+        return reservations;
     }
 
-    public String getRoomType() {
-        return roomType;
+    public List<Customer> getCustomers() {
+        return customers;
     }
 
-    public int getMaxOccupants() {
-        return maxOccupants;
+    public void addCustomer(Customer customer, int startDate){
+        if(!checkIfCustomerExists(customer.getName(), startDate))
+            customers.add(customer);
+    }
+    private boolean checkIfCustomerExists(String name, int startDate){
+        Optional<Customer> first = customers.stream().filter(customer -> customer.getName().compareTo(name) == 0 &&
+                        customer.getRoomReservations().stream().allMatch(reservation -> reservation.getStayDuration().getStartDate() == startDate))
+                    .findFirst();
+        return first.isPresent();
+    }
+    public void addReservation(RoomReservation reservation){
+        reservations.add(reservation);
     }
 
-    public int getCostPerNight() {
-        return costPerNight;
+    public void deleteCustomer(Customer customer){
+        customers.remove(customer);
     }
 
-    public int getRoomNumber() {
-        return roomNumber;
+    public void deleteReservation(RoomReservation reservation){
+        reservations.remove(reservation);
     }
 
-    public boolean isReserved() {
-        return reserved;
-    }
 
-    public void setReserved(boolean reserved) {
-        this.reserved = reserved;
+    @Override
+    public String toString() {
+        return "Room{" +
+                "roomDetails=" + roomDetails +
+                ", reservations=" + reservations +
+                '}';
     }
 }
