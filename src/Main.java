@@ -14,6 +14,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
+/**
+ * Name : AARYAMAN RANJIT POL
+ * STUDENT ID : 7924419
+ * COURSE : COMP 2150
+ * ASSIGNMENT : 1
+ * REMARKS: RESERVING THE HOTEL ROOMS WITH THE CUSTOMERS
+ */
 
 public class Main {
     private Hotel hotel;
@@ -22,6 +29,14 @@ public class Main {
         main.readHotel("a1plain.txt");
         main.readReserve("a1reserve.txt");
     }
+
+    /**
+     *
+     * @param filename
+     * Takes filename as input, opens a Scanner object and reads the hotel file
+     * @throws FileNotFoundException
+     * if file is not found
+     */
 
     public void readHotel(String filename) throws FileNotFoundException {
         File source = new File(filename);
@@ -41,12 +56,20 @@ public class Main {
                     Room room = new Room(roomDetails);
                     floors.addRooms(room);
                 }
-
             }
         }
         sc.close();
-
     }
+
+    /**
+     *
+     * @param filename
+     * Takes filename as input, opens a Scanner object and reads the Commands file
+     * @throws FileNotFoundException
+     * if file is not found
+     *
+     *
+     */
 
     public void readReserve(String filename) throws FileNotFoundException {
 
@@ -117,7 +140,7 @@ public class Main {
                             .findFirst();
 
                     if(roomReservation.isEmpty()){
-                        throw  new RuntimeException();
+                        throw  new RuntimeException("Reservation does not exists");
                     }
                     StayDuration stayDuration = roomReservation.get().getStayDuration();
                     if(stayDuration.getStartDate() == cancellationDate){
@@ -127,12 +150,9 @@ public class Main {
                     else{
                         stayDuration.setEndDate(cancellationDate);
                     }
-
-
                 } catch (Exception e) {
-                    System.out.println("Error while parsing the string : " + s + "Or customer doesn't exist");
+                    System.out.println(e.getMessage());
                 }
-
             }
             else if (s.startsWith(CommandType.PRINT.toString())) {
 
@@ -153,6 +173,12 @@ public class Main {
                 else if (split[1].compareTo(PrintCommands.CUSTOMERS.toString()) == 0) {
                     Print.printCustomers();
                 }
+                else {
+                    System.out.println("Invalid COMMAND : " + s);
+                }
+            }
+            else {
+                System.out.println("Invalid COMMAND : " + s);
             }
         }
     }

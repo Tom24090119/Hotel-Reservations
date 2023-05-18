@@ -9,7 +9,19 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * This class is responsible for printing on the console
+ * All the methods are static and returns void
+ */
+
 public class Print {
+    /**
+     * Prints all the customers with the number of reservations they have made.
+     * This also includes the customers who have attempted to made reservations
+     * WORKING :
+     * Get the Customer lists and sort them according to their name in alphabetical order
+     * Then for each customer from the sorted list, print its name and number of reservations
+     */
     public static void printCustomers(){
         System.out.println("Customers:");
         List<Customer> customers = Customer.getCustomers();
@@ -22,6 +34,18 @@ public class Print {
         System.out.println();
     }
 
+    /**
+     *
+     * @param floors
+     * LIST of floors present in the hotel
+     * @param roomNumber
+     * Should display customers present in the room
+     * WORKING :
+     * loop through the list of floors and only get that room which matches with the roomNumber provided
+     * Then,
+     * Get List of reservation present in the room.
+     * Loop through the list of reservations and prin the customer and their stay nights
+     */
     public static void printCustomersInRoom(List<Floor> floors,int roomNumber) {
 
         Room first = floors.stream()
@@ -41,6 +65,14 @@ public class Print {
         });
         System.out.println();
     }
+
+    /**
+     *
+     * @param name
+     * Name of customer that its cost, stay and room
+     *
+     * print the details of the customer reservation
+     */
 
     public static void printCustomerReservation(String name) {
         Optional<Customer> searchedCustomer = Customer.searchCustomer(name);
@@ -64,6 +96,12 @@ public class Print {
         }
         System.out.println();
     }
+
+    /**
+     *
+     * @param day
+     * Prints all the customer that are reserved on that day
+     */
     public static void printReservationsOfDay(List<Floor> floors, int day) {
         System.out.printf("Rooms on day %d \n",day);
             for(Floor floor : floors){

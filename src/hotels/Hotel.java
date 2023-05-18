@@ -3,6 +3,13 @@ package hotels;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class stores :
+ * 1. Name of the hotel
+ * 2. Number of Floors in the current hotel
+ * 3. List of floors in the hotel
+ */
+
 public class Hotel {
 
     private final String hotelName;

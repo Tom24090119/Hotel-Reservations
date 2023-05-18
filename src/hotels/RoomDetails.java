@@ -1,5 +1,12 @@
 package hotels;
 
+/**
+ * This class stores the details of the room such as
+ * 1. RoomType
+ * 2. Max number of Guests allowed
+ * 3. Cost for the number per night
+ * 4. Room Number
+ */
 public class RoomDetails {
 
     private final String roomType;

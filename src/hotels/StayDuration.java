@@ -1,5 +1,9 @@
 package hotels;
 
+/**
+ * This class stores the reservation start Date and end Date
+ * EndDate - StartDate = Number of Nights
+ */
 public class StayDuration {
 
     private int startDate;
