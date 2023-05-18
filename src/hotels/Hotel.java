@@ -19,10 +19,6 @@ public class Hotel {
         this.floors = new ArrayList<>();
     }
 
-    public String getHotelName() {
-        return hotelName;
-    }
-
     public int getNumberOfFloors() {
         return numberOfFloors;
     }

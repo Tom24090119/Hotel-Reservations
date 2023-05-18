@@ -69,7 +69,6 @@ public class Main {
                 Customer customer;
                 if (searchCustomer.isEmpty()) {
                     customer = new Customer(name);
-                    customer.addStayDuration(stayDuration);
                     Customer.addCustomers(customer);
                 }
                 else {

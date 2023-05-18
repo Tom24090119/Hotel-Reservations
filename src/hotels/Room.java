@@ -28,10 +28,6 @@ public class Room {
         return reservations;
     }
 
-    public List<Customer> getCustomers() {
-        return customers;
-    }
-
     public void addCustomer(Customer customer, int startDate){
         if(!checkIfCustomerExists(customer.getName(), startDate))
             customers.add(customer);
@@ -46,10 +42,6 @@ public class Room {
     }
     public void addReservation(RoomReservation reservation){
         reservations.add(reservation);
-    }
-
-    public void deleteCustomer(Customer customer){
-        customers.remove(customer);
     }
 
     public void deleteReservation(RoomReservation reservation){

@@ -1,8 +1,5 @@
 package Reservation;
 
-
-import hotels.StayDuration;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -15,12 +12,10 @@ public class Customer {
 
     private final List<RoomReservation> roomReservations;
 
-//    private final List<StayDuration> stayDurations;
 
     public Customer(String name) {
         this.name = name;
         this.roomReservations = new ArrayList<>();
-//        this.stayDurations = new ArrayList<>();
     }
     public String getName() {
         return name;
@@ -43,17 +38,10 @@ public class Customer {
         roomReservations.remove(reservation);
     }
 
-    public void addStayDuration(StayDuration stayDuration){
-//        stayDurations.add(stayDuration);
-    }
 
     public List<RoomReservation> getRoomReservations() {
         return roomReservations;
     }
-
-//    public List<StayDuration> getStayDurations() {
-//        return stayDurations;
-//    }
 
     public static void addCustomers(Customer customer){
         customers.add(customer);
