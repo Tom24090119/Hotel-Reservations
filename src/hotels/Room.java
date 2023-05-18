@@ -37,8 +37,10 @@ public class Room {
             customers.add(customer);
     }
     private boolean checkIfCustomerExists(String name, int startDate){
-        Optional<Customer> first = customers.stream().filter(customer -> customer.getName().compareTo(name) == 0 &&
-                        customer.getRoomReservations().stream().allMatch(reservation -> reservation.getStayDuration().getStartDate() == startDate))
+        Optional<Customer> first = customers.stream()
+                .filter(customer -> customer.getName().compareTo(name) == 0 &&
+                        customer.getRoomReservations().stream()
+                                .allMatch(reservation -> reservation.getStayDuration().getStartDate() == startDate))
                     .findFirst();
         return first.isPresent();
     }

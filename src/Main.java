@@ -1,8 +1,10 @@
-import Reservation.CommandType;
+import commands.CommandType;
 import Reservation.Customer;
 import Reservation.ReservationService;
 import Reservation.RoomReservation;
+import commands.PrintCommands;
 import hotels.*;
+import print.Print;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -19,7 +21,6 @@ public class Main {
         Main main = new Main();
         main.readHotel("a1plain.txt");
         main.readReserve("a1reserve.txt");
-
     }
 
     public void readHotel(String filename) throws FileNotFoundException {
@@ -79,14 +80,25 @@ public class Main {
 
                 if (room.isPresent()) {
                     Room availableRoom = room.get();
-                    availableRoom.addCustomer(customer,stayDuration.getStartDate());
                     RoomReservation roomReservation = new RoomReservation(customer, stayDuration);
+                    availableRoom.addCustomer(customer,stayDuration.getStartDate());
                     roomReservation.addRoom(availableRoom,stayDuration.getStartDate());
                     customer.addReservation(roomReservation, stayDuration.getStartDate());
                     availableRoom.addReservation(roomReservation);
                 }
-                //TODO: Need to add sameFloor booking and anotherFloor Booking
-                System.out.println();
+                else {
+                    List<Room> sameFloorRooms = ReservationService.sameFloorRoom(hotel.getFloors(), numberOfGuests, stayDuration);
+                    List<Room> anyAvailableRooms = ReservationService.findAnyAvailableRooms(hotel.getFloors(), numberOfGuests, stayDuration);
+                    if(!sameFloorRooms.isEmpty()) {
+                        ReservationService.reserveRooms(sameFloorRooms,customer,stayDuration);
+                    }
+                    else if(!anyAvailableRooms.isEmpty()){
+                        ReservationService.reserveRooms(anyAvailableRooms,customer,stayDuration);
+                    }
+                    else{
+                        System.out.printf("Cannot make a reservation for %s : No rooms available\n\n",customer.getName());
+                    }
+                }
             }
             else if (s.startsWith(CommandType.CANCEL.toString())) {
                 try {
@@ -125,18 +137,24 @@ public class Main {
             }
             else if (s.startsWith(CommandType.PRINT.toString())) {
 
+                String[] split = s.split(",");
+
+                if(split[1].compareTo(PrintCommands.DAY.toString()) == 0){
+                    int day = Integer.parseInt(split[2]);
+                    Print.printReservationsOfDay(hotel.getFloors(),day);
+                }
+                else if (split[1].compareTo(PrintCommands.ROOM.toString()) == 0) {
+                    int roomNumber = Integer.parseInt(split[2]);
+                    Print.printCustomersInRoom(hotel.getFloors(),roomNumber);
+                }
+                else if (split[1].compareTo(PrintCommands.CUSTOMER.toString()) == 0) {
+                    String name = split[2];
+                    Print.printCustomerReservation(name);
+                }
+                else if (split[1].compareTo(PrintCommands.CUSTOMERS.toString()) == 0) {
+                    Print.printCustomers();
+                }
             }
         }
-        List<RoomReservation> list = this.hotel.getFloors()
-                .stream()
-                .flatMap(floor -> floor.getRooms().stream())
-                .flatMap(room -> room.getReservations().stream()).toList();
-
-//        System.out.println(list);
-
-        list.forEach(reservation -> System.out.println(reservation.getRooms()));
-
     }
-
-
 }
