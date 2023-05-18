@@ -43,10 +43,4 @@ public class Floor {
         this.rooms.add(room);
     }
 
-    @Override
-    public String toString() {
-        return "Floor{" +
-                "rooms=" + rooms +
-                '}';
-    }
 }

@@ -38,13 +38,4 @@ public class RoomDetails {
         return roomNumber;
     }
 
-    @Override
-    public String toString() {
-        return "RoomDetails{" +
-                "roomType='" + roomType + '\'' +
-                ", maxOccupants=" + maxOccupants +
-                ", costPerNight=" + costPerNight +
-                ", roomNumber=" + roomNumber +
-                '}';
-    }
 }

@@ -31,11 +31,4 @@ public class StayDuration {
         this.endDate = endDate;
     }
 
-    @Override
-    public String toString() {
-        return "StayDuration{" +
-                "startDate=" + startDate +
-                ", endDate=" + endDate +
-                '}';
-    }
 }

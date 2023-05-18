@@ -38,14 +38,4 @@ public class Hotel {
         this.floors.add(floor);
     }
 
-    @Override
-    public String toString() {
-        return "Hotel{" +
-                "hotelName='" + hotelName + '\'' +
-                ", numberOfFloors=" + numberOfFloors +
-                ", " +
-                "\n"+
-                "floors=" + floors +
-                '}';
-    }
 }

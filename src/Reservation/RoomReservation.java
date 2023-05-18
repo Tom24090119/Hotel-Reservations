@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * This class the keeps the track of the stay duration of customer and List of rooms it has being reserved
+ */
 public class RoomReservation {
 
     private final List<Room> rooms;
@@ -29,7 +32,6 @@ public class RoomReservation {
                 .filter(roomReservation -> roomReservation.getCustomer().getName().compareTo(customer.getName()) == 0 &&
                         roomReservation.getStayDuration().getStartDate() == startDate)
                 .findFirst();
-//        System.out.println(reservation.get());
         return reservation.isPresent();
     }
 
@@ -44,11 +46,4 @@ public class RoomReservation {
         return stayDuration;
     }
 
-    @Override
-    public String toString() {
-        return "RoomReservation{" +
-                "customer=" + customer +
-                ", stayDuration=" + stayDuration +
-                '}';
-    }
 }

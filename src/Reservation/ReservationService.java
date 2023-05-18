@@ -10,6 +10,19 @@ import java.util.List;
 import java.util.Optional;
 
 public class ReservationService {
+
+    /**
+     *
+     * @param floors
+     * @param size
+     * @param stayDuration
+     * @return Room object
+     * This function return a single room which has the least cost and can accommodate the requested size
+     * WORKING :
+     * loop through all the floors,
+     * get all room which has maxSize greater than or equal to size
+     * also check if there is no reservation during the time given
+     */
     public static Optional<Room> leastCostRoom(List<Floor> floors , int size, StayDuration stayDuration){
         return floors.stream()
                 .flatMap(floor -> floor.getRooms().stream())
@@ -18,6 +31,12 @@ public class ReservationService {
                                 .allMatch(reservation ->  stayDuration.getEndDate() <= reservation.getStayDuration().getStartDate()))
                 .min(Comparator.comparingInt(room2 -> room2.getRoomDetails().getCostPerNight()));
     }
+
+    /**
+     *
+     * @return List of rooms available on the same floor
+     * This function returns the rooms with the least cost on the same floor
+     */
     public static List<Room> sameFloorRoom(List<Floor> floors , int size, StayDuration stayDuration){
 
         List<Room> availableRooms = new ArrayList<>();
@@ -55,6 +74,11 @@ public class ReservationService {
         }
         return new ArrayList<>();
     }
+
+    /**
+     * @return List of rooms
+     * Returns the list of rooms on different floors which all together can accommodate the size provided
+     */
     public static List<Room> findAnyAvailableRooms(List<Floor> floors , int size, StayDuration stayDuration){
         List<Room> availableRooms = new ArrayList<>();
         int availableSize=0;
@@ -89,6 +113,11 @@ public class ReservationService {
         }
         return availableRooms;
     }
+
+    /**
+     * Assigns the rooms to the customer and customers to the rooms
+     *
+     */
 
     public static void reserveRooms(List<Room> rooms,Customer customer, StayDuration stayDuration){
         List<RoomReservation> customerRoomReservations = customer.getRoomReservations();

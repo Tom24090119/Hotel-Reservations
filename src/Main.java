@@ -80,47 +80,52 @@ public class Main {
             String s = sc.nextLine();
             if (s.startsWith(CommandType.RESERVE.toString())) {
                 String[] split = s.split(",");
+                try {
+                    String name = split[1];
+                    int numberOfGuests = Integer.parseInt(split[2]);
+                    int startDate = Integer.parseInt(split[3]);
+                    int endDate = startDate + Integer.parseInt(split[4]);
 
-                String name = split[1];
-                int numberOfGuests = Integer.parseInt(split[2]);
-                int startDate = Integer.parseInt(split[3]);
-                int endDate = startDate + Integer.parseInt(split[4]);
+                    StayDuration stayDuration = new StayDuration(startDate, endDate);
 
-                StayDuration stayDuration = new StayDuration(startDate, endDate);
-
-                Optional<Customer> searchCustomer = Customer.searchCustomer(name);
-                Customer customer;
-                if (searchCustomer.isEmpty()) {
-                    customer = new Customer(name);
-                    Customer.addCustomers(customer);
-                }
-                else {
-                    customer = searchCustomer.get();
-                }
-                List<Floor> floors = hotel.getFloors();
-                Optional<Room> room = ReservationService.leastCostRoom(floors, numberOfGuests, stayDuration);
-
-                if (room.isPresent()) {
-                    Room availableRoom = room.get();
-                    RoomReservation roomReservation = new RoomReservation(customer, stayDuration);
-                    availableRoom.addCustomer(customer,stayDuration.getStartDate());
-                    roomReservation.addRoom(availableRoom,stayDuration.getStartDate());
-                    customer.addReservation(roomReservation, stayDuration.getStartDate());
-                    availableRoom.addReservation(roomReservation);
-                }
-                else {
-                    List<Room> sameFloorRooms = ReservationService.sameFloorRoom(hotel.getFloors(), numberOfGuests, stayDuration);
-                    List<Room> anyAvailableRooms = ReservationService.findAnyAvailableRooms(hotel.getFloors(), numberOfGuests, stayDuration);
-                    if(!sameFloorRooms.isEmpty()) {
-                        ReservationService.reserveRooms(sameFloorRooms,customer,stayDuration);
+                    Optional<Customer> searchCustomer = Customer.searchCustomer(name);
+                    Customer customer;
+                    if (searchCustomer.isEmpty()) {
+                        customer = new Customer(name);
+                        Customer.addCustomers(customer);
                     }
-                    else if(!anyAvailableRooms.isEmpty()){
-                        ReservationService.reserveRooms(anyAvailableRooms,customer,stayDuration);
+                    else {
+                        customer = searchCustomer.get();
                     }
-                    else{
-                        System.out.printf("Cannot make a reservation for %s : No rooms available\n\n",customer.getName());
+                    List<Floor> floors = hotel.getFloors();
+                    Optional<Room> room = ReservationService.leastCostRoom(floors, numberOfGuests, stayDuration);
+
+                    if (room.isPresent()) {
+                        Room availableRoom = room.get();
+                        RoomReservation roomReservation = new RoomReservation(customer, stayDuration);
+                        availableRoom.addCustomer(customer,stayDuration.getStartDate());
+                        roomReservation.addRoom(availableRoom,stayDuration.getStartDate());
+                        customer.addReservation(roomReservation, stayDuration.getStartDate());
+                        availableRoom.addReservation(roomReservation);
+                    }
+                    else {
+                        List<Room> sameFloorRooms = ReservationService.sameFloorRoom(hotel.getFloors(), numberOfGuests, stayDuration);
+                        List<Room> anyAvailableRooms = ReservationService.findAnyAvailableRooms(hotel.getFloors(), numberOfGuests, stayDuration);
+                        if(!sameFloorRooms.isEmpty()) {
+                            ReservationService.reserveRooms(sameFloorRooms,customer,stayDuration);
+                        }
+                        else if(!anyAvailableRooms.isEmpty()){
+                            ReservationService.reserveRooms(anyAvailableRooms,customer,stayDuration);
+                        }
+                        else{
+                            System.out.printf("%s -> Cannot make a reservation : No rooms available\n\n",s);
+                        }
                     }
                 }
+                catch (Exception e){
+                    System.out.println(e.getMessage());
+                }
+
             }
             else if (s.startsWith(CommandType.CANCEL.toString())) {
                 try {
@@ -157,25 +162,31 @@ public class Main {
             else if (s.startsWith(CommandType.PRINT.toString())) {
 
                 String[] split = s.split(",");
+                try {
+                    if(split[1].compareTo(PrintCommands.DAY.toString()) == 0){
+                        int day = Integer.parseInt(split[2]);
+                        Print.printReservationsOfDay(hotel.getFloors(),day);
+                    }
+                    else if (split[1].compareTo(PrintCommands.ROOM.toString()) == 0) {
+                        int roomNumber = Integer.parseInt(split[2]);
+                        Print.printCustomersInRoom(hotel.getFloors(),roomNumber);
+                    }
+                    else if (split[1].compareTo(PrintCommands.CUSTOMER.toString()) == 0) {
+                        String name = split[2];
+                        Print.printCustomerReservation(name);
+                    }
+                    else if (split[1].compareTo(PrintCommands.CUSTOMERS.toString()) == 0) {
+                        Print.printCustomers();
+                    }
+                    else {
+                        System.out.println("Invalid COMMAND : " + s);
+                    }
+                }
+                catch (Exception e){
+                    System.out.println("ERROR : " + s);
+                }
 
-                if(split[1].compareTo(PrintCommands.DAY.toString()) == 0){
-                    int day = Integer.parseInt(split[2]);
-                    Print.printReservationsOfDay(hotel.getFloors(),day);
-                }
-                else if (split[1].compareTo(PrintCommands.ROOM.toString()) == 0) {
-                    int roomNumber = Integer.parseInt(split[2]);
-                    Print.printCustomersInRoom(hotel.getFloors(),roomNumber);
-                }
-                else if (split[1].compareTo(PrintCommands.CUSTOMER.toString()) == 0) {
-                    String name = split[2];
-                    Print.printCustomerReservation(name);
-                }
-                else if (split[1].compareTo(PrintCommands.CUSTOMERS.toString()) == 0) {
-                    Print.printCustomers();
-                }
-                else {
-                    System.out.println("Invalid COMMAND : " + s);
-                }
+
             }
             else {
                 System.out.println("Invalid COMMAND : " + s);
